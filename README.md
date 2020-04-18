@@ -19,13 +19,14 @@
 * 指定轮转的日志个数
 * err log 文件实时写，其他日志文件缓冲写
 
-### 日志格式说明
-日志格式约定：
-- 基本格式： ts / file / logLev / obj 是每条日志必须有的 field
- 	 `ts=xxx	file=xxx	logLev=xxx		obj=xxx`
-- 在线追踪用的日志信息，描述都用 info=xxx 表示
-- 离线收集用的日志信息，数据都用 data=xxx 表示，对应特定方法 LogData / LogReqData
+### 日志格式
+#### 日志格式约定
+基本格式： ts / file / logLev / obj 是每条日志必须有的 field  
+```
+ts=xxx	file=xxx	logLev=xxx		obj=xxx
+```
 
+#### 日志格式示例
 ```
 ts=04-07T21:19:38.653	file=zlog/zlogger.go:43	logLev=[INFO]		obj=START	info=start done	cost=1586265578652
 ts=04-07T21:19:38.654	file=zlog/zlogger.go:47	logLev=[INFO]		obj=LOAD_CONFIG	info=load var xxx
