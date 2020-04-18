@@ -5,18 +5,6 @@
 // - LogReq* 开头的方法都会带有 reqId field，用于打印处理请求过程中产生的日志
 // - *Err 结尾的方法，用于打印类型为 error 的信息
 //
-// 日志格式约定：
-// - 基本格式： ts / file / logLev / obj 是每条日志必须有的 field
-//		 ts=xxx	file=xxx	logLev=xxx		obj=xxx
-// - 在线追踪用的日志信息，描述都用 info=xxx 表示
-// - 离线收集用的日志信息，数据都用 data=xxx 表示，对应特定方法 LogData / LogReqData
-//
-// 日志格式示例：
-// ts=04-07T21:19:38.653	file=zlog/zlogger.go:43	logLev=[INFO]		obj=START	info=start done	cost=1586265578652
-// ts=04-07T21:19:38.654	file=zlog/zlogger.go:47	logLev=[INFO]		obj=LOAD_CONFIG	info=load var xxx
-// ts=04-07T21:19:38.654	file=zlog/zlogger.go:57	logLev=[INFO]		obj=MYSQL	info=get version	err=time out
-// ts=04-07T21:19:38.654	file=zlog/zlogger.go:62	logLev=[INFO]		obj=MYSQL	host=127.0.0.1:80	info=	cost=1586265578653
-//
 // 使用此日志库之前，必须先通过 zlog.Init() 方法进行初始化
 
 package zlog
@@ -37,7 +25,7 @@ func Sync() error {
 }
 
 // 记录服务启动耗时
-// startTimeNS 单位：纳秒
+// startTimeNS 指期望开始统计的位置记录的时间，单位：纳秒
 func LogStart(logLevel, info string, startTimeNS int64) {
 	logger.LogStart(logLevel, info, startTimeNS)
 }
