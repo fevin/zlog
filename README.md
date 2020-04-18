@@ -74,7 +74,7 @@ ts=xxx	file=xxx	logLev=xxx		obj=xxx
 ## 使用方法
 
 ```
-go get code.aliyun.com/module-go/zlog
+go get github.com/fevin/zlog
 ```
 
 代码示例：
@@ -83,7 +83,7 @@ go get code.aliyun.com/module-go/zlog
 import (
     "time"
 
-    "code.aliyun.com/module-go/zlog"
+    "github.com/fevin/zlog"
 )
 
 type YOU_PROJECT_CONFIG struct {
