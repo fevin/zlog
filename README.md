@@ -12,11 +12,25 @@
 此日志库基于 [zap](https://github.com/uber-go/zap) 封装，以 `k=v` 的形式打印日志    
 支持功能：
 * 日志分级
+* 支持 k=v tab 分割的日志格式
 * ERROR/FATAL 日志单独一份输出到 err log 文件
 * 自动轮转
 * 指定单个日志文件大小
 * 指定轮转的日志个数
 * err log 文件实时写，其他日志文件缓冲写
+
+### 日志格式说明
+日志格式约定：
+- 基本格式： ts / file / logLev / obj 是每条日志必须有的 field
+ 	 `ts=xxx	file=xxx	logLev=xxx		obj=xxx`
+- 在线追踪用的日志信息，描述都用 info=xxx 表示
+- 离线收集用的日志信息，数据都用 data=xxx 表示，对应特定方法 LogData / LogReqData
+
+```
+ts=04-07T21:19:38.653	file=zlog/zlogger.go:43	logLev=[INFO]		obj=START	info=start done	cost=1586265578652
+ts=04-07T21:19:38.654	file=zlog/zlogger.go:47	logLev=[INFO]		obj=LOAD_CONFIG	info=load var xxx
+ts=04-07T21:19:38.654	file=zlog/zlogger.go:62	logLev=[INFO]		obj=MYSQL	host=127.0.0.1:3306	info=	cost=1586265578653
+```
 
 ### 日志配置
 #### 配置项说明

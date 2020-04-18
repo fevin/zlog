@@ -14,7 +14,6 @@
 // 日志格式示例：
 // ts=04-07T21:19:38.653	file=zlog/zlogger.go:43	logLev=[INFO]		obj=START	info=start done	cost=1586265578652
 // ts=04-07T21:19:38.654	file=zlog/zlogger.go:47	logLev=[INFO]		obj=LOAD_CONFIG	info=load var xxx
-// ts=04-07T21:19:38.654	file=zlog/zlogger.go:53	logLev=[INFO]		obj=BASE_STATS_DATA	data={"key":"test_key","value":"test_val"}
 // ts=04-07T21:19:38.654	file=zlog/zlogger.go:57	logLev=[INFO]		obj=MYSQL	info=get version	err=time out
 // ts=04-07T21:19:38.654	file=zlog/zlogger.go:62	logLev=[INFO]		obj=MYSQL	host=127.0.0.1:80	info=	cost=1586265578653
 //
