@@ -1,0 +1,6 @@
+/dist/dist
+.idea
+*.swp
+*.swo
+*.swn
+*.log

@@ -1,0 +1,10 @@
+{
+    "Log" : {
+        "MaxLogSizeMB": <MaxLogSizeMB>,
+        "MaxLogFileNum": <MaxLogFileNum>,
+        "LogDirName": "<LogDirName>",
+        "LogFileName": "<LogFileName>",
+        "ErrorLogFileName": "<ErrorLogFileName>",
+        "MaxLogLevel": <MaxLogLevel>
+    }
+}
