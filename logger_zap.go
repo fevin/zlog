@@ -2,6 +2,7 @@ package zlog
 
 import (
 	"fmt"
+	"time"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -34,10 +35,10 @@ func newZapLogger(logConf *LogConfig) zlogger {
 		MaxBackups: logConf.MaxLogFileNum,
 		LocalTime:  true,
 	}
-	allLevelWriter := zapcore.AddSync(newBufFileWriteSyncer(allLogger, logConf.MaxLogSizeMB))
+	allLevelWriteSyncer := newBufferWriteSyncer(zapcore.AddSync(allLogger), 0, 20*time.Second)
 
 	errLogFileName := logConf.GetErrorLogFilePath()
-	errLevelWriter := zapcore.AddSync(&lumberjack.Logger{
+	errLevelWriteSyncer := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   errLogFileName,
 		MaxSize:    logConf.MaxLogSizeMB,
 		MaxBackups: logConf.MaxLogFileNum,
@@ -47,8 +48,8 @@ func newZapLogger(logConf *LogConfig) zlogger {
 	// logger
 	dLevel := zap.NewAtomicLevelAt(getZapLevel(logConf.MaxLogLevel))
 	core := zapcore.NewTee(
-		zapcore.NewCore(zapEncoder, allLevelWriter, dLevel),
-		zapcore.NewCore(zapEncoder, errLevelWriter, zapEnableErrLogLevel),
+		zapcore.NewCore(zapEncoder, allLevelWriteSyncer, dLevel),
+		zapcore.NewCore(zapEncoder, errLevelWriteSyncer, zapEnableErrLogLevel),
 	)
 	logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(2))
 
@@ -76,7 +77,7 @@ func (this *zapLogger) Sync() error {
 func (this *zapLogger) getLogFunc(logLevel string) _TYPE_ZAP_LOG_fUNC {
 	logFunc, isOK := this.logFuncMap[logLevel]
 	if !isOK {
-		this.logger.Fatal("log", zap.String(LK_INFO, "logLevel is error:"+logLevel))
+		this.logger.Fatal("zlog", zap.String(LK_INFO, "logLevel is error:"+logLevel))
 		logFunc = this.logger.Info
 	}
 	return logFunc
