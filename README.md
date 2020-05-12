@@ -97,7 +97,7 @@ func main() {
 
     // init zlog
     zlog.Init(conf.Log)
-    defer zlog.Sync()
+    defer zlog.Close()
 
     // 初始化失败，打 FATAL 并 触发 panic
     zlog.LogPanic(zlog.OBJ_INIT, "init idb manager", err)
