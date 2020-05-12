@@ -9,11 +9,22 @@
 
 package zlog
 
+import (
+	stdlog "log"
+	"sync"
+)
+
 var (
-	logger zlogger
+	logger    zlogger = nil
+	loggerMtx sync.Mutex
 )
 
 func Init(conf *LogConfig) error {
+	loggerMtx.Lock()
+	defer loggerMtx.Unlock()
+	if logger != nil {
+		panic("zlog cannot be initialized repeatedly!")
+	}
 	logConf := new(LogConfig)
 	logConf.Reset(conf)
 	logger = newZapLogger(logConf)
@@ -24,8 +35,14 @@ func Sync() error {
 	return logger.Sync()
 }
 
+func Close() error {
+	logger.Close()
+	stdlog.Println("[zlog] close")
+	return nil
+}
+
 // 记录服务启动耗时
-// startTimeNS 指期望开始统计的位置记录的时间，单位：纳秒
+// startTimeNS 单位：纳秒
 func LogStart(logLevel, info string, startTimeNS int64) {
 	logger.LogStart(logLevel, info, startTimeNS)
 }

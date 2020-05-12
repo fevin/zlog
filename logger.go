@@ -2,6 +2,7 @@ package zlog
 
 type zlogger interface {
 	Sync() error
+	Close() error
 
 	// Log*
 	LogStart(logLevel, info string, startTimeNS int64)

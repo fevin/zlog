@@ -2,6 +2,7 @@ package zlog
 
 import (
 	"fmt"
+	"io"
 	"time"
 
 	"go.uber.org/zap"
@@ -35,7 +36,7 @@ func newZapLogger(logConf *LogConfig) zlogger {
 		MaxBackups: logConf.MaxLogFileNum,
 		LocalTime:  true,
 	}
-	allLevelWriteSyncer := newBufferWriteSyncer(zapcore.AddSync(allLogger), 0, 20*time.Second)
+	allLevelWriteSyncer, syncerCloser := newBufferWriteSyncer(zapcore.AddSync(allLogger), 0, 20*time.Second)
 
 	errLogFileName := logConf.GetErrorLogFilePath()
 	errLevelWriteSyncer := zapcore.AddSync(&lumberjack.Logger{
@@ -54,6 +55,7 @@ func newZapLogger(logConf *LogConfig) zlogger {
 	logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(2))
 
 	zlogger := new(zapLogger)
+	zlogger.closer = syncerCloser
 	zlogger.logger = logger
 	zlogger.logFuncMap = make(map[string]_TYPE_ZAP_LOG_fUNC, 5)
 	zlogger.logFuncMap[LL_DEBUG] = logger.Debug
@@ -66,12 +68,18 @@ func newZapLogger(logConf *LogConfig) zlogger {
 
 type zapLogger struct {
 	logger     *zap.Logger
+	closer     io.Closer
 	logFuncMap map[string]_TYPE_ZAP_LOG_fUNC
 }
 
 // 强制刷新日志到日志文件中
 func (this *zapLogger) Sync() error {
 	return this.logger.Sync()
+}
+
+// 关闭 log
+func (this *zapLogger) Close() error {
+	return this.closer.Close()
 }
 
 func (this *zapLogger) getLogFunc(logLevel string) _TYPE_ZAP_LOG_fUNC {
